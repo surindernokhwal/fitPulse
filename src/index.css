@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+.loginpage {
+    padding: 20px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    max-width: 500px;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    min-height: 500px;
+    max-height: 500px;
+    margin-top: 100px;
+    border-radius: 20px;
+}
+.loginpage h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.loginpage input {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
+    font-size: 17px;
+    font-weight: 500;
+}
+.loginpage .loginbtn {
+    background: blue;
+    padding: 7px 20px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+}
+.loginpage a {
+    color: blue;
+    font-weight: 500;
+}
+.homepage {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 30px;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+.homepage h1 {
+    font-size: 30px;
+    font-weight: 600;
+}
+.homepage button {
+    color: #fff;
+    background: blue;
+    padding: 5px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+button.goolebtn {
+    display: flex;
+    align-items: center;
+    color: blue;
+    font-weight: 500;
+    gap: 10px;
+    cursor: pointer;
+}
+button.goolebtn svg{
+    width: 20px;
+    height: auto;
+}
