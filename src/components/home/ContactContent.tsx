@@ -1,10 +1,31 @@
+import emailjs from "emailjs-com";
 import "./Dashboard.css";
 
 const ContactContent = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Message sent successfully! Our support team will get back to you soon.");
+
+    const form = e.target as HTMLFormElement;
+
+    // 1️⃣ Send email to YOU (admin)
+    emailjs.sendForm(
+      "service_esiddi3",
+      "template_zugtnfu",
+      form,
+      "litsGbJVRCaAu2DtQ"
+    );
+
+    // 2️⃣ Send auto-reply to USER
+    emailjs.sendForm(
+      "service_esiddi3",
+      "template_1xirwzr",
+      form,
+      "litsGbJVRCaAu2DtQ"
+    );
+
+    alert("Message sent successfully!");
+    form.reset();
   };
 
   return (
@@ -62,6 +83,7 @@ const ContactContent = () => {
                 <label style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Full Name <span style={{ color: '#ef4444' }}>*</span></label>
                 <input 
                   type="text" 
+                  name="name"
                   placeholder="John Doe"
                   required
                   style={{ 
@@ -78,6 +100,7 @@ const ContactContent = () => {
                 <label style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Email Address <span style={{ color: '#ef4444' }}>*</span></label>
                 <input 
                   type="email" 
+                  name="email"
                   placeholder="john@example.com"
                   required
                   style={{ 
@@ -97,6 +120,7 @@ const ContactContent = () => {
               <div style={{ position: 'relative' }}>
                 <select
                   required
+                  name="subject"
                   style={{ 
                     width: '100%',
                     padding: '12px', 
@@ -129,6 +153,7 @@ const ContactContent = () => {
               <label style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Message <span style={{ color: '#ef4444' }}>*</span></label>
               <textarea 
                 rows={5}
+                name="message"
                 placeholder="How can we help you today?"
                 required
                 style={{ 

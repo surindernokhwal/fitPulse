@@ -75,7 +75,7 @@ const DashboardContent = () => {
           </div>
           {activeGoal && (
             <button
-              onClick={() => navigate('/home/goals')}
+              onClick={() => navigate('/home/goals', { state: { selectedGoal, selectedDuration, confirmed: !!(selectedGoal && selectedDuration) } })}
               style={{ padding: '8px 18px', borderRadius: '8px', border: `1px solid ${activeGoal.color}`, backgroundColor: `${activeGoal.color}15`, color: activeGoal.color, cursor: 'pointer', fontWeight: '600', fontSize: '13px', transition: 'all 0.2s' }}
             >
               View Full Plan →
@@ -127,7 +127,7 @@ const DashboardContent = () => {
             ))}
             {selectedGoal && selectedDuration && (
               <button
-                onClick={() => navigate('/home/goals')}
+                onClick={() => navigate('/home/goals', { state: { selectedGoal, selectedDuration, confirmed: true } })}
                 style={{
                   marginLeft: 'auto', padding: '7px 20px', borderRadius: '8px', border: 'none',
                   background: activeGoal?.color, color: 'white',

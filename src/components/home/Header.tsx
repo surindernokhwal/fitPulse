@@ -4,9 +4,10 @@ import "./Dashboard.css";
 interface HeaderProps {
   handleLogout: () => void;
   toggleSidebar: () => void;
+  userAvatar: string;
 }
 
-const Header = ({ handleLogout, toggleSidebar }: HeaderProps) => {
+const Header = ({ handleLogout, toggleSidebar, userAvatar }: HeaderProps) => {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
 
   return (
@@ -34,11 +35,8 @@ const Header = ({ handleLogout, toggleSidebar }: HeaderProps) => {
         </div>
         
         <div className="user-profile">
-          <div className="user-avatar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#3b82f6', color: 'white' }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
+          <div className="user-avatar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'transparent', padding: 0, overflow: 'hidden' }}>
+            <img src={userAvatar} alt="User Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <button onClick={handleLogout} className="logout-btn">
             Logout

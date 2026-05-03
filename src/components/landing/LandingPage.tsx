@@ -59,10 +59,37 @@ const CloseIcon = () => (
 );
 
 const BoltIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="20" height="20" viewBox="0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
   </svg>
 );
+
+// ───── 3D Wireframe Cube Component ─────
+const WireframeCube = ({ size, color, blur, style, refObj }: any) => {
+  const half = size / 2;
+  const faceStyle: React.CSSProperties = {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    background: `${color}10`,
+    border: `1px solid ${color}60`,
+    boxShadow: `0 0 ${blur}px ${color}30, inset 0 0 ${blur}px ${color}30`,
+    backdropFilter: 'blur(2px)',
+  };
+
+  return (
+    <div style={{ perspective: '1200px', width: size, height: size, zIndex: 1, pointerEvents: 'none', ...style }}>
+      <div ref={refObj} style={{ width: '100%', height: '100%', position: 'relative', transformStyle: 'preserve-3d', transition: 'transform 0.15s cubic-bezier(0.2, 0, 0.2, 1)' }}>
+        <div style={{ ...faceStyle, transform: `translateZ(${half}px)` }} />
+        <div style={{ ...faceStyle, transform: `rotateY(90deg) translateZ(${half}px)` }} />
+        <div style={{ ...faceStyle, transform: `rotateY(180deg) translateZ(${half}px)` }} />
+        <div style={{ ...faceStyle, transform: `rotateY(-90deg) translateZ(${half}px)` }} />
+        <div style={{ ...faceStyle, transform: `rotateX(90deg) translateZ(${half}px)` }} />
+        <div style={{ ...faceStyle, transform: `rotateX(-90deg) translateZ(${half}px)` }} />
+      </div>
+    </div>
+  );
+};
 
 // ───── Landing Page Component ─────
 const LandingPage = () => {
@@ -79,6 +106,46 @@ const LandingPage = () => {
 
   // Scroll-reveal refs
   const revealRefs = useRef<HTMLElement[]>([]);
+
+  // Mouse effect refs
+  const glowRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const cube1Ref = useRef<HTMLDivElement>(null);
+  const cube2Ref = useRef<HTMLDivElement>(null);
+  const cube3Ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (glowRef.current) {
+        glowRef.current.style.left = `${e.clientX}px`;
+        glowRef.current.style.top = `${e.clientY}px`;
+      }
+      
+      if (gridRef.current) {
+        const x = (e.clientX / window.innerWidth - 0.5) * 2;
+        const y = (e.clientY / window.innerHeight - 0.5) * 2;
+        const dist = Math.sqrt(x*x + y*y);
+        const scaleHover = 1.05 + (1 - Math.min(dist, 1)) * 0.1; // Zoom in near center
+        
+        gridRef.current.style.transform = `perspective(1000px) rotateX(${-y * 12}deg) rotateY(${x * 12}deg) scale(${scaleHover}) translateZ(${Math.abs(x*y)*30}px)`;
+        
+        if (cube1Ref.current) {
+          // Large cube rotates drastically based on mouse
+          cube1Ref.current.style.transform = `rotateX(${y * -180 + 30}deg) rotateY(${x * 180 + 45}deg) translateZ(${dist * -50}px)`;
+        }
+        if (cube2Ref.current) {
+          // Small cube spins the opposite way
+          cube2Ref.current.style.transform = `rotateX(${y * 120 + 15}deg) rotateY(${x * -120 + 20}deg) translateZ(${dist * 30}px)`;
+        }
+        if (cube3Ref.current) {
+          // Purple cube spins on Z and X
+          cube3Ref.current.style.transform = `rotateZ(${x * 90}deg) rotateX(${y * 90 + 45}deg) translateZ(${dist * -20}px)`;
+        }
+      }
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -173,13 +240,46 @@ const LandingPage = () => {
   // ───── Render ─────
   return (
     <div className="landing-page">
+      {/* Mouse Glow Effect */}
+      <div 
+        ref={glowRef}
+        style={{
+          position: 'fixed',
+          width: '600px',
+          height: '600px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0) 70%)',
+          pointerEvents: 'none',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 0,
+          mixBlendMode: 'screen',
+          top: '-1000px',
+          left: '-1000px'
+        }}
+      />
+
       {/* Background Effects */}
       <div className="landing-bg-effects">
         <div className="bg-orb bg-orb-1" />
         <div className="bg-orb bg-orb-2" />
         <div className="bg-orb bg-orb-3" />
+        
+        {/* Interactive 3D Cubes */}
+        <WireframeCube refObj={cube1Ref} size={140} color="#3b82f6" blur={20} style={{ position: 'absolute', top: '25%', right: '15%' }} />
+        <WireframeCube refObj={cube2Ref} size={80} color="#10b981" blur={15} style={{ position: 'absolute', bottom: '20%', left: '10%' }} />
+        <WireframeCube refObj={cube3Ref} size={100} color="#8b5cf6" blur={25} style={{ position: 'absolute', top: '15%', left: '25%' }} />
       </div>
-      <div className="bg-grid" />
+      <div 
+        className="bg-grid" 
+        ref={gridRef}
+        style={{
+          inset: '-30%',
+          transformOrigin: 'center center',
+          transition: 'transform 0.15s cubic-bezier(0.2, 0, 0.2, 1)',
+          WebkitMaskImage: 'radial-gradient(circle at center, black 0%, transparent 60%)',
+          maskImage: 'radial-gradient(circle at center, black 0%, transparent 60%)'
+        }}
+      />
 
       {/* ───── NAVBAR ───── */}
       <nav className={`lp-navbar ${scrolled ? "scrolled" : ""}`}>

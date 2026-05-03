@@ -9,7 +9,12 @@ import Header from "./Header";
 const Home = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [userAvatar, setUserAvatar] = useState(() => localStorage.getItem("userAvatar") || "/avatars/avatar_man_1.png");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    localStorage.setItem("userAvatar", userAvatar);
+  }, [userAvatar]);
 
   useEffect(() => {
     // Check missing auth
@@ -35,6 +40,7 @@ const Home = () => {
 
   const userName = user?.displayName ? user.displayName.split(' ')[0] : "User";
   const userId = user?.uid || null;
+  const userEmail = user?.email || "";
 
   return (
     <div className="dashboard-layout">
@@ -47,9 +53,9 @@ const Home = () => {
 
       <Sidebar isOpen={isSidebarOpen} closeSidebar={closeSidebar} />
       <div className="main-wrapper">
-        <Header handleLogout={handleLogout} toggleSidebar={toggleSidebar} />
+        <Header handleLogout={handleLogout} toggleSidebar={toggleSidebar} userAvatar={userAvatar} />
         {/* Pass down context */}
-        <Outlet context={{ userName, userId }} />
+        <Outlet context={{ userName, userId, userEmail, userAvatar, setUserAvatar }} />
       </div>
     </div>
   );

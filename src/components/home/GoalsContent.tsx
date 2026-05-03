@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import "./Dashboard.css";
 
 type GoalId = "weight_loss" | "weight_gain" | "muscle_build" | "just_fit";
@@ -143,9 +144,10 @@ const durations: Duration[] = [
 ];
 
 const GoalsContent = () => {
-  const [selectedGoal, setSelectedGoal] = useState<GoalId | null>(null);
-  const [selectedDuration, setSelectedDuration] = useState<DurationId | null>(null);
-  const [confirmed, setConfirmed] = useState(false);
+  const location = useLocation();
+  const [selectedGoal, setSelectedGoal] = useState<GoalId | null>(location.state?.selectedGoal || null);
+  const [selectedDuration, setSelectedDuration] = useState<DurationId | null>(location.state?.selectedDuration || null);
+  const [confirmed, setConfirmed] = useState(location.state?.confirmed || false);
 
   const activeGoal = goals.find(g => g.id === selectedGoal);
   const activeDuration = durations.find(d => d.id === selectedDuration);

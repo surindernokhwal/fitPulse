@@ -1,8 +1,26 @@
+import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import "./Dashboard.css";
 
+const avatars = [
+  "/avatars/avatar_man_1.png",
+  "/avatars/avatar_woman_1.png",
+  "/avatars/avatar_man_2.png",
+  "/avatars/avatar_woman_2.png",
+  "/avatars/avatar_man_3.png",
+  "/avatars/avatar_woman_3.png",
+  "/avatars/avatar_man_4.png",
+  "/avatars/avatar_woman_4.png",
+  "/avatars/avatar_man_5.png",
+  "/avatars/avatar_woman_5.png",
+];
+
 const ProfileContent = () => {
-  const { userName } = useOutletContext<{ userName: string, userId: string | null }>();
+  const { userName, userEmail, userAvatar, setUserAvatar } = useOutletContext<{ 
+    userName: string, userId: string | null, userEmail: string,
+    userAvatar: string, setUserAvatar: (a: string) => void
+  }>();
+  const [showAvatarPicker, setShowAvatarPicker] = useState(false);
 
   return (
     <main className="dashboard-content">
@@ -26,8 +44,11 @@ const ProfileContent = () => {
             marginBottom: '20px',
             position: 'relative'
           }}>
-            <span style={{ fontSize: '48px' }}>👤</span>
-            <button style={{
+            <img src={userAvatar} alt="Profile Avatar" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+            <button 
+              type="button"
+              onClick={() => setShowAvatarPicker(!showAvatarPicker)}
+              style={{
               position: 'absolute',
               bottom: 0,
               right: 0,
@@ -47,6 +68,51 @@ const ProfileContent = () => {
                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
               </svg>
             </button>
+            
+            {showAvatarPicker && (
+              <div style={{
+                position: 'absolute',
+                top: '100%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                marginTop: '12px',
+                backgroundColor: 'var(--bg-card)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '12px',
+                padding: '12px',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(5, 1fr)',
+                gap: '8px',
+                zIndex: 10,
+                boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+                width: 'max-content'
+              }}>
+                {avatars.map((a, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => { setUserAvatar(a); setShowAvatarPicker(false); }}
+                    style={{
+                      background: 'transparent',
+                      border: userAvatar === a ? '3px solid var(--accent-blue)' : '3px solid transparent',
+                      cursor: 'pointer',
+                      padding: '2px',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'all 0.2s',
+                      width: '64px',
+                      height: '64px'
+                    }}
+                    onMouseOver={(e) => { if(userAvatar !== a) e.currentTarget.style.transform = 'scale(1.05)' }}
+                    onMouseOut={(e) => { if(userAvatar !== a) e.currentTarget.style.transform = 'scale(1)' }}
+                  >
+                    <img src={a} alt={`Avatar option ${i}`} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
           
           <h2 style={{ margin: '0 0 4px 0', fontSize: '20px' }}>{userName || "User"}</h2>
@@ -107,7 +173,7 @@ const ProfileContent = () => {
               <label style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Email Address</label>
               <input 
                 type="email" 
-                defaultValue=""
+                defaultValue={userEmail}
                 placeholder="your.email@example.com"
                 style={{ 
                   padding: '12px', 
