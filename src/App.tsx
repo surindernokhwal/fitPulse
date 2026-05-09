@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 
 import LandingPage from "./components/landing/LandingPage";
 import Home from "./components/home/Home";
@@ -13,7 +13,7 @@ import GoalsContent from "./components/home/GoalsContent";
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<Home />}>
@@ -27,7 +27,7 @@ const App = () => {
           <Route path="goals" element={<GoalsContent />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 

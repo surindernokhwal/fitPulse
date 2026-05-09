@@ -8,15 +8,6 @@ function createWindow() {
   });
 
   win.loadFile(path.join(__dirname, "dist/index.html"));
-
-  // Open DevTools
-  win.webContents.openDevTools();
 }
 
 app.whenReady().then(createWindow);
-
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
-});
