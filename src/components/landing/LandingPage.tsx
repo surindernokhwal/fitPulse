@@ -59,7 +59,16 @@ const CloseIcon = () => (
 );
 
 const BoltIcon = () => (
-  <svg width="20" height="20" viewBox="0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
   </svg>
 );
@@ -312,6 +321,18 @@ const LandingPage = () => {
           </button>
         </div>
       </nav>
+
+      {/* ───── MOBILE MENU DROPDOWN ───── */}
+      {mobileMenuOpen && (
+        <div className="lp-mobile-menu" onClick={() => setMobileMenuOpen(false)}>
+          <button className="lp-mobile-nav-link" onClick={() => scrollTo("features")}>Features</button>
+          <button className="lp-mobile-nav-link" onClick={() => scrollTo("about")}>How It Works</button>
+          <button className="lp-mobile-nav-link" onClick={() => scrollTo("pricing")}>Pricing</button>
+          <div className="lp-mobile-menu-divider" />
+          <button className="lp-mobile-nav-auth lp-btn-ghost" onClick={() => { setMobileMenuOpen(false); openModal("login"); }}>Log In</button>
+          <button className="lp-mobile-nav-auth lp-btn-primary" onClick={() => { setMobileMenuOpen(false); openModal("register"); }}>Get Started</button>
+        </div>
+      )}
 
       {/* ───── HERO ───── */}
       <section className="lp-hero" id="hero">
